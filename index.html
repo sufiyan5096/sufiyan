@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Propose Flow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #ffe5e5, #ffccd5);
+      color: #333;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      max-width: 600px;
+      padding: 20px;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #ff3366;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    a {
+      text-decoration: none;
+      padding: 10px 20px;
+      background: #ff3366;
+      color: white;
+      border-radius: 5px;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    a:hover {
+      background: #ff0055;
+      transform: scale(1.05);
+    }
+
+    .gif {
+      margin-bottom: 20px;
+    }
+
+    iframe {
+      border: none;
+    }
+
+    /* Floating Heart Confetti */
+    .heartConfetti {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .heartConfetti span {
+      position: absolute;
+      display: block;
+      width: 20px;
+      height: 20px;
+      background-color: #ff3366;
+      opacity: 0.8;
+      transform: rotate(45deg);
+      animation: fall 5s infinite ease-in-out;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="heartConfetti"></div>
+  <div class="container">
+    <div id="content"></div>
+  </div>
+
+  <script>
+    // Pages Content
+    const pages = [
+      {
+        gif: '<iframe src="https://tenor.com/embed/22885016" class="gif" width="100%" height="200"></iframe>',
+        title: 'Happy Propose Day 🤗',
+        message: 'Do You Love Me ❤️😭🤌',
+        yesLink: 4,
+        noLink: 1,
+      },
+      {
+        gif: '<iframe src="https://tenor.com/embed/22050818" class="gif" width="100%" height="200"></iframe>',
+        title: 'Soch Le Acche Se 😭',
+        message: 'Do You Love Me 🥹',
+        yesLink: 4,
+        noLink: 2,
+      },
+      {
+        gif: '<iframe src="https://tenor.com/embed/15195810" class="gif" width="100%" height="200"></iframe>',
+        title: 'Ek Aur Baar Soch Le 😭🩵',
+        message: 'Do You Love Me??? Yes Bol 😭🥹',
+        yesLink: 4,
+        noLink: 3,
+      },
+      {
+        gif: '<iframe src="https://tenor.com/embed/15974530976611222074" class="gif" width="100%" height="200"></iframe>',
+        title: 'Maan Ja Na! Kitna Bhav Khaegi???',
+        message: 'Yes Bol De Naa 🥹',
+        yesLink: 4,
+        noLink: 'secret',
+      },
+      {
+        gif: '<iframe src="https://tenor.com/embed/11111829" class="gif" width="100%" height="200"></iframe>',
+        title: 'She Said YES! 🎉',
+        message: 'Welcome to Our Journey of Love ❤️',
+        yesLink: '',
+        noLink: '',
+      },
+      {
+        gif: '<iframe src="https://tenor.com/embed/23132203" class="gif" width="100%" height="200"></iframe>',
+        title: 'Special Secret 💖',
+        message: 'You discovered a hidden surprise! Let\'s celebrate.',
+        yesLink: '',
+        noLink: '',
+      },
+    ];
+
+    const createConfetti = () => {
+      const confettiContainer = document.querySelector('.heartConfetti');
+      for (let i = 0; i < 50; i++) {
+        const span = document.createElement('span');
+        const size = Math.random() * 20 + 10;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 2 + 3;
+        span.style.width = `${size}px`;
+        span.style.height = `${size}px`;
+        span.style.left = `${left}%`;
+        span.style.animationDelay = `${delay}s`;
+        span.style.animationDuration = `${duration}s`;
+        confettiContainer.appendChild(span);
+      }
+    };
+
+    const renderPage = (pageIndex) => {
+      const page = pages[pageIndex];
+      const contentDiv = document.getElementById('content');
+      contentDiv.innerHTML = `
+        ${page.gif || ''}
+        <h1>${page.title}</h1>
+        <p>${page.message}</p>
+        <div class="btn">
+          ${page.yesLink !== undefined ? `<a href="javascript:renderPage(${page.yesLink})" onclick="createConfetti()">Yes</a>` : ''}
+          ${page.noLink !== undefined ? `<a href="javascript:renderPage(${page.noLink})">No</a>` : ''}
+        </div>
+      `;
+    };
+
+    // Initialize the first page
+    renderPage(0);
+  </script>
+</body>
+</html>
